@@ -1,4 +1,4 @@
-// script.js actualizado: Ctrl + Alt + O + U solo swap de usuarios, nueva tecla para abrir configuración
+// script.js actualizado: swap de usuarios y configuración con cierre funcional
 
 document.addEventListener('DOMContentLoaded', () => {
   let mensajes = [];
@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const configPanel = document.getElementById('config-panel');
   const avatarInput = document.getElementById('avatarInput');
   const nombreInput = document.getElementById('nombreInput');
+  const closeConfigBtn = document.getElementById('closeConfig');
+  const closeConfigXBtn = document.getElementById('closeConfigX');
 
   const cachedName = localStorage.getItem('userName');
   const cachedAvatar = localStorage.getItem('userAvatar');
@@ -55,6 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
     configPanel.classList.remove('hidden');
   }
 
+  function cerrarConfiguracion(){
+    configPanel.classList.add('hidden');
+  }
+
+  // Cerrar config con botones X y cerrar
+  closeConfigBtn.onclick = cerrarConfiguracion;
+  closeConfigXBtn.onclick = cerrarConfiguracion;
+
   // -------------------- Atajo Ctrl + Alt + O + U solo swap de usuario --------------------
   document.addEventListener('keydown', e => {
     if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='o'){
@@ -68,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // -------------------- Nuevo atajo Ctrl + Alt + G para abrir configuración --------------------
+  // -------------------- Atajo Ctrl + Alt + G para abrir configuración --------------------
   document.addEventListener('keydown', e => {
     if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='g'){
       abrirConfiguracion();
