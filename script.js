@@ -1,4 +1,4 @@
-// script.js actualizado: Ctrl + Alt + O + U solo hace swap de usuarios
+// script.js actualizado: Ctrl + Alt + O + U solo hace swap de usuarios, NO abre configuración
 
 document.addEventListener('DOMContentLoaded', () => {
   let mensajes = [];
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(input.value.trim()){ addMessage(input.value); input.value=''; }
   };
 
-  function toggleUserOnly(){
+  function swapUser(){
     currentUserId = currentUserId===1?2:1;
     contactName.textContent = contactos.find(c=>c.id===currentUserId).nombre;
     nombreInput.value = contactos.find(c=>c.id===currentUserId).nombre;
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='o'){
       const handleNextKey = event => {
         if(event.key.toLowerCase()==='u'){
-          toggleUserOnly();
+          swapUser(); // solo swap, NO abrir configuración
         }
         document.removeEventListener('keydown', handleNextKey);
       };
