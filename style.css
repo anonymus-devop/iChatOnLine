@@ -1,4 +1,4 @@
-/* Animación de entrada de mensajes */
+/* Animación entrada de mensajes */
 @keyframes slideFade {
   0% { opacity: 0; transform: translateY(20px);}
   100% { opacity: 1; transform: translateY(0);}
@@ -8,3 +8,9 @@
 /* Scrollbar minimalista */
 #chat-window::-webkit-scrollbar { width: 6px; }
 #chat-window::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
+
+/* Variables de color por defecto */
+:root {
+  --color-sent: #007AFF;
+  --color-received: #E5E5EA;
+}
