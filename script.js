@@ -4,16 +4,18 @@ let contactos = [
   { id: 1, nombre: "Amigo", avatar: "assets/avatar.png" },
   { id: 2, nombre: "Tú", avatar: "assets/avatar.png" }
 ];
-let currentUserId = 2; // usuario por defecto "Tú"
+let currentUserId = 2;
 const chatWindow = document.getElementById('chat-window');
 const contactName = document.getElementById('contact-name');
 const body = document.body;
 
-// -------------------- Cargar datos de caché --------------------
-const nombreInput = document.getElementById('nombreInput');
+// -------------------- Panel Configuración --------------------
+const configPanel = document.getElementById('config-panel');
 const avatarInput = document.getElementById('avatarInput');
+const nombreInput = document.getElementById('nombreInput');
 const downloadBtn = document.getElementById('downloadBtn');
 
+// Cargar caché
 const cachedName = localStorage.getItem('userName');
 const cachedAvatar = localStorage.getItem('userAvatar');
 if(cachedName) {
@@ -25,7 +27,7 @@ if(cachedAvatar) {
 }
 contactName.textContent = contactos.find(c=>c.id===currentUserId).nombre;
 
-// -------------------- Renderizar un mensaje --------------------
+// -------------------- Renderizar mensajes --------------------
 function renderMessage(msg) {
   const div = document.createElement('div');
   div.className = `px-4 py-2 rounded-2xl max-w-[70%] break-words transition-all duration-300 animate-slideFade flex items-center gap-2`;
@@ -38,7 +40,6 @@ function renderMessage(msg) {
   div.style.color = tipo === 'sent' ? 'white' : 'black';
   div.classList.add(tipo === 'sent' ? 'self-end' : 'self-start');
 
-  // Avatar
   const avatarImg = document.createElement('img');
   const userAvatar = contactos.find(c => c.id === msg.from).avatar;
   avatarImg.src = userAvatar;
@@ -94,12 +95,11 @@ function exportarMarkdown() {
   a.click();
 }
 
-// -------------------- Panel de configuración --------------------
-const configPanel = document.getElementById('config-panel');
+// -------------------- Configuración Eventos --------------------
 document.getElementById('config-btn').onclick = () => configPanel.classList.remove('hidden');
 document.getElementById('closeConfig').onclick = () => configPanel.classList.add('hidden');
+document.getElementById('closeConfigX').onclick = () => configPanel.classList.add('hidden');
 
-// Colores y fondo
 document.getElementById('colorEnviado').oninput = e =>
   document.documentElement.style.setProperty('--color-sent', e.target.value);
 document.getElementById('colorRecibido').oninput = e =>
