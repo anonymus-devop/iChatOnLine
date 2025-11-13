@@ -1,4 +1,4 @@
-// script.js actualizado: swap de usuarios y configuración con cierre funcional
+// script.js actualizado: swap de usuarios y configuración con cierre funcional corregido
 
 document.addEventListener('DOMContentLoaded', () => {
   let mensajes = [];
@@ -61,9 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     configPanel.classList.add('hidden');
   }
 
-  // Cerrar config con botones X y cerrar
-  closeConfigBtn.onclick = cerrarConfiguracion;
-  closeConfigXBtn.onclick = cerrarConfiguracion;
+  // Cerrar config con botones X y cerrar (asegurando que sean escuchadores válidos)
+  if(closeConfigBtn) closeConfigBtn.addEventListener('click', cerrarConfiguracion);
+  if(closeConfigXBtn) closeConfigXBtn.addEventListener('click', cerrarConfiguracion);
 
   // -------------------- Atajo Ctrl + Alt + O + U solo swap de usuario --------------------
   document.addEventListener('keydown', e => {
