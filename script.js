@@ -10,10 +10,19 @@ const contactName = document.getElementById('contact-name');
 const body = document.body;
 
 // -------------------- Cargar datos de caché --------------------
+const nombreInput = document.getElementById('nombreInput');
+const avatarInput = document.getElementById('avatarInput');
+const downloadBtn = document.getElementById('downloadBtn');
+
 const cachedName = localStorage.getItem('userName');
 const cachedAvatar = localStorage.getItem('userAvatar');
-if(cachedName) contactos.find(c=>c.id===currentUserId).nombre = cachedName;
-if(cachedAvatar) contactos.find(c=>c.id===currentUserId).avatar = cachedAvatar;
+if(cachedName) {
+  contactos.find(c=>c.id===currentUserId).nombre = cachedName;
+  nombreInput.value = cachedName;
+}
+if(cachedAvatar) {
+  contactos.find(c=>c.id===currentUserId).avatar = cachedAvatar;
+}
 contactName.textContent = contactos.find(c=>c.id===currentUserId).nombre;
 
 // -------------------- Renderizar un mensaje --------------------
@@ -21,7 +30,6 @@ function renderMessage(msg) {
   const div = document.createElement('div');
   div.className = `px-4 py-2 rounded-2xl max-w-[70%] break-words transition-all duration-300 animate-slideFade flex items-center gap-2`;
   
-  // Tipo según usuario actual
   const tipo = msg.from === currentUserId ? 'sent' : 'received';
   
   div.style.backgroundColor = tipo === 'sent'
@@ -30,7 +38,7 @@ function renderMessage(msg) {
   div.style.color = tipo === 'sent' ? 'white' : 'black';
   div.classList.add(tipo === 'sent' ? 'self-end' : 'self-start');
 
-  // Avatar del remitente
+  // Avatar
   const avatarImg = document.createElement('img');
   const userAvatar = contactos.find(c => c.id === msg.from).avatar;
   avatarImg.src = userAvatar;
@@ -99,12 +107,7 @@ document.getElementById('colorRecibido').oninput = e =>
 document.getElementById('fondoChat').oninput = e =>
   document.getElementById('app').style.backgroundColor = e.target.value + '33';
 
-// -------------------- Avatar y nombre usuario --------------------
-const avatarInput = document.createElement('input');
-avatarInput.type = 'file';
-avatarInput.accept = 'image/*';
-avatarInput.className = "block mt-2";
-
+// Avatar
 avatarInput.onchange = e => {
   const file = e.target.files[0];
   if(!file) return;
@@ -118,38 +121,21 @@ avatarInput.onchange = e => {
   reader.readAsDataURL(file);
 };
 
-// Nombre editable
-const nombreInput = document.createElement('input');
-nombreInput.type = 'text';
-nombreInput.value = contactos.find(c => c.id === currentUserId).nombre;
-nombreInput.className = "block mt-2 p-1 rounded w-full text-black";
+// Nombre
 nombreInput.onchange = e => {
   contactos.find(c => c.id === currentUserId).nombre = e.target.value;
   localStorage.setItem('userName', e.target.value);
   contactName.textContent = e.target.value;
 };
 
-// Botón de descarga de Markdown
-const downloadBtn = document.createElement('button');
-downloadBtn.textContent = 'Descargar chat (.md)';
-downloadBtn.className = 'mt-2 px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition';
+// Descargar Markdown
 downloadBtn.onclick = exportarMarkdown;
-
-// Agregar inputs al panel de configuración
-configPanel.appendChild(document.createElement('hr'));
-configPanel.appendChild(document.createTextNode("Avatar y Nombre de Usuario"));
-configPanel.appendChild(avatarInput);
-configPanel.appendChild(nombreInput);
-configPanel.appendChild(downloadBtn);
 
 // -------------------- Alternar usuario --------------------
 document.getElementById('switch-user').onclick = () => {
   currentUserId = currentUserId === 1 ? 2 : 1;
   contactName.textContent = contactos.find(c => c.id === currentUserId).nombre;
-  
-  // Actualizar inputs de configuración
   nombreInput.value = contactos.find(c => c.id === currentUserId).nombre;
-
   chatWindow.innerHTML = '';
   mensajes.forEach(msg => renderMessage(msg));
 };
