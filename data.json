@@ -1,0 +1,8 @@
+{
+  "contactos": [
+    { "id": 1, "nombre": "Amigo", "avatar": "assets/avatar.png" }
+  ],
+  "mensajes": [
+    { "contactoId": 1, "tipo": "received", "contenido": "Hola! Bienvenido a tu chat Liquid Glass.", "imagen": null }
+  ]
+}
