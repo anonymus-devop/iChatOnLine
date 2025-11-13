@@ -1,10 +1,10 @@
 {
   "contactos":[
-    {"id":1,"nombre":"Amigo"},
-    {"id":2,"nombre":"Tú"}
+    {"id":1,"nombre":"Amigo","avatar":"assets/avatar.png"},
+    {"id":2,"nombre":"Tú","avatar":"assets/avatar.png"}
   ],
   "mensajes":[
-    {"contactoId":1,"tipo":"received","contenido":"Hola! Bienvenido al chat PWA."},
-    {"contactoId":2,"tipo":"sent","contenido":"¡Hola! Qué tal?"}
+    {"id":1,"from":1,"to":2,"contenido":"Hola! Bienvenido al chat PWA dinámico."},
+    {"id":2,"from":2,"to":1,"contenido":"¡Hola! Qué tal?"}
   ]
 }

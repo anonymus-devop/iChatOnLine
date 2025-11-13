@@ -3,19 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat PWA Tailwind</title>
-
-<!-- Tailwind CDN -->
+<title>Chat PWA Tailwind Dinámico</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
-
 </head>
 <body class="bg-gray-200 flex justify-center items-center min-h-screen transition-colors duration-500">
 <div id="app" class="w-96 h-[700px] flex flex-col rounded-3xl overflow-hidden backdrop-blur-lg bg-white/20 shadow-2xl relative">
-
-  <!-- Header -->
   <div id="chat-header" class="flex justify-between items-center px-6 py-4 bg-white/30 dark:bg-gray-800/30 backdrop-blur-lg">
     <div class="flex gap-2 items-center">
       <span id="contact-name" class="text-lg font-semibold text-black dark:text-white">Amigo</span>
@@ -26,55 +20,28 @@
       <button id="info-btn" class="px-2 py-1 rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white font-bold">i</button>
     </div>
   </div>
-
-  <!-- Chat -->
   <div id="chat-window" class="flex-1 flex flex-col gap-3 p-4 overflow-y-auto"></div>
-
-  <!-- Input -->
   <div id="chat-input" class="flex p-4 gap-2 bg-white/30 dark:bg-gray-700/30 backdrop-blur-lg">
-    <input id="mensaje-input" type="text" placeholder="Escribe un mensaje..."
-      class="flex-1 rounded-full px-4 py-2 outline-none bg-white/50 dark:bg-gray-600/50 placeholder-gray-700 dark:placeholder-gray-300 text-black dark:text-white">
+    <input id="mensaje-input" type="text" placeholder="Escribe un mensaje..." class="flex-1 rounded-full px-4 py-2 outline-none bg-white/50 dark:bg-gray-600/50 placeholder-gray-700 dark:placeholder-gray-300 text-black dark:text-white">
     <button id="send-btn" class="px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition">Enviar</button>
   </div>
-
-  <!-- Panel Configuración -->
   <div id="config-panel" class="hidden absolute top-0 left-0 w-full h-full bg-black/50 backdrop-blur-md flex flex-col p-6 gap-4 z-50 overflow-auto">
-    <!-- Botón X -->
     <button id="closeConfigX" class="absolute top-4 right-4 text-white text-2xl font-bold hover:text-gray-300 transition">×</button>
-
     <h2 class="text-white text-xl font-semibold">Configuración</h2>
-    
-    <!-- Colores -->
-    <label class="text-white flex justify-between items-center">
-      Color Enviado <input type="color" id="colorEnviado" value="#007AFF">
-    </label>
-    <label class="text-white flex justify-between items-center">
-      Color Recibido <input type="color" id="colorRecibido" value="#E5E5EA">
-    </label>
-    <label class="text-white flex justify-between items-center">
-      Fondo <input type="color" id="fondoChat" value="#ffffff">
-    </label>
-
-    <!-- Avatar y nombre -->
+    <label class="text-white flex justify-between items-center">Color Enviado <input type="color" id="colorEnviado" value="#007AFF"></label>
+    <label class="text-white flex justify-between items-center">Color Recibido <input type="color" id="colorRecibido" value="#E5E5EA"></label>
+    <label class="text-white flex justify-between items-center">Fondo <input type="color" id="fondoChat" value="#ffffff"></label>
     <h3 class="text-white mt-2 font-semibold">Avatar y Nombre de Usuario</h3>
     <input type="file" id="avatarInput" accept="image/*" class="block mt-1">
     <input type="text" id="nombreInput" class="block mt-1 p-1 rounded w-full text-black" placeholder="Nombre de usuario">
-
-    <!-- Botón descargar Markdown -->
     <button id="downloadBtn" class="mt-2 px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition">Descargar chat (.md)</button>
-
-    <!-- Botón Cerrar tradicional -->
     <button id="closeConfig" class="mt-4 px-4 py-2 rounded-full bg-white text-black hover:bg-gray-200 transition">Cerrar</button>
   </div>
-
 </div>
-
 <script src="script.js"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-    .then(() => console.log('Service Worker registrado'))
-    .catch(err => console.log('Error Service Worker:', err));
+  navigator.serviceWorker.register('service-worker.js').then(()=>console.log('Service Worker registrado')).catch(err=>console.log('Error Service Worker:',err));
 }
 </script>
 </body>
