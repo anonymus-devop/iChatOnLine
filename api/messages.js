@@ -1,0 +1,1 @@
+export default function handler(req,res){const mensajes=[{id:1,from:1,contenido:'Hola dinámico!'},{id:2,from:2,contenido:'¡Funciona con Tailwind full!'}];res.status(200).json(mensajes);}
