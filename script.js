@@ -136,7 +136,7 @@ document.getElementById('switch-user').onclick = () => toggleConfigAndUser();
 
 // -------------------- Botón info --------------------
 document.getElementById('info-btn').onclick = () => {
-  alert("Atajo de teclado para alternar usuario y abrir configuración:\n\nCtrl + G + 1");
+  alert("Atajo de teclado para alternar usuario y abrir configuración:\n\nCtrl + Alt + G");
 };
 
 // -------------------- Función para alternar usuario y abrir configuración --------------------
@@ -151,14 +151,8 @@ function toggleConfigAndUser() {
 
 // -------------------- Atajo de teclado --------------------
 document.addEventListener('keydown', e => {
-  if (e.ctrlKey && e.key.toLowerCase() === 'g') {
-    const listener = evt => {
-      if (evt.key === '1') {
-        toggleConfigAndUser();
-        document.removeEventListener('keydown', listener);
-      }
-    };
-    document.addEventListener('keydown', listener);
+  if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'g') {
+    toggleConfigAndUser();
   }
 });
 
