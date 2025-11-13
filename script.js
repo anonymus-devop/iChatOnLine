@@ -1,18 +1,25 @@
 // -------------------- Variables iniciales --------------------
 let mensajes = [];
 let contactos = [
-  { id: 1, nombre: "Amigo" },
-  { id: 2, nombre: "Tú" }
+  { id: 1, nombre: "Amigo", avatar: "assets/avatar.png" },
+  { id: 2, nombre: "Tú", avatar: "assets/avatar.png" }
 ];
 let currentUserId = 2; // usuario por defecto "Tú"
 const chatWindow = document.getElementById('chat-window');
 const contactName = document.getElementById('contact-name');
 const body = document.body;
 
+// -------------------- Cargar datos de caché --------------------
+const cachedName = localStorage.getItem('userName');
+const cachedAvatar = localStorage.getItem('userAvatar');
+if(cachedName) contactos.find(c=>c.id===currentUserId).nombre = cachedName;
+if(cachedAvatar) contactos.find(c=>c.id===currentUserId).avatar = cachedAvatar;
+contactName.textContent = contactos.find(c=>c.id===currentUserId).nombre;
+
 // -------------------- Renderizar un mensaje --------------------
 function renderMessage(msg) {
   const div = document.createElement('div');
-  div.className = `px-4 py-2 rounded-2xl max-w-[70%] break-words transition-all duration-300 animate-slideFade`;
+  div.className = `px-4 py-2 rounded-2xl max-w-[70%] break-words transition-all duration-300 animate-slideFade flex items-center gap-2`;
   
   // Tipo según usuario actual
   const tipo = msg.from === currentUserId ? 'sent' : 'received';
@@ -22,8 +29,24 @@ function renderMessage(msg) {
       : getComputedStyle(document.documentElement).getPropertyValue('--color-received') || '#E5E5EA';
   div.style.color = tipo === 'sent' ? 'white' : 'black';
   div.classList.add(tipo === 'sent' ? 'self-end' : 'self-start');
-  div.textContent = msg.contenido;
-  
+
+  // Avatar del remitente
+  const avatarImg = document.createElement('img');
+  const userAvatar = contactos.find(c => c.id === msg.from).avatar;
+  avatarImg.src = userAvatar;
+  avatarImg.className = "w-6 h-6 rounded-full flex-shrink-0";
+
+  const texto = document.createElement('span');
+  texto.textContent = msg.contenido;
+
+  if(tipo==='sent') {
+    div.appendChild(texto);
+    div.appendChild(avatarImg);
+  } else {
+    div.appendChild(avatarImg);
+    div.appendChild(texto);
+  }
+
   chatWindow.appendChild(div);
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
@@ -52,10 +75,10 @@ document.getElementById('send-btn').onclick = () => {
 
 // -------------------- Exportar Markdown --------------------
 function exportarMarkdown() {
-  let md = mensajes.map(m => 
+  let md = mensajes.map(m =>
     `**${contactos.find(c => c.id === m.from).nombre}**: ${m.contenido}`
   ).join('\n\n');
-  
+
   const blob = new Blob([md], { type: 'text/markdown' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -68,19 +91,65 @@ const configPanel = document.getElementById('config-panel');
 document.getElementById('config-btn').onclick = () => configPanel.classList.remove('hidden');
 document.getElementById('closeConfig').onclick = () => configPanel.classList.add('hidden');
 
-document.getElementById('colorEnviado').oninput = e => 
+// Colores y fondo
+document.getElementById('colorEnviado').oninput = e =>
   document.documentElement.style.setProperty('--color-sent', e.target.value);
-document.getElementById('colorRecibido').oninput = e => 
+document.getElementById('colorRecibido').oninput = e =>
   document.documentElement.style.setProperty('--color-received', e.target.value);
-document.getElementById('fondoChat').oninput = e => 
+document.getElementById('fondoChat').oninput = e =>
   document.getElementById('app').style.backgroundColor = e.target.value + '33';
+
+// -------------------- Avatar y nombre usuario --------------------
+const avatarInput = document.createElement('input');
+avatarInput.type = 'file';
+avatarInput.accept = 'image/*';
+avatarInput.className = "block mt-2";
+
+avatarInput.onchange = e => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    contactos.find(c => c.id === currentUserId).avatar = reader.result;
+    localStorage.setItem('userAvatar', reader.result);
+    chatWindow.innerHTML = '';
+    mensajes.forEach(msg => renderMessage(msg));
+  };
+  reader.readAsDataURL(file);
+};
+
+// Nombre editable
+const nombreInput = document.createElement('input');
+nombreInput.type = 'text';
+nombreInput.value = contactos.find(c => c.id === currentUserId).nombre;
+nombreInput.className = "block mt-2 p-1 rounded w-full text-black";
+nombreInput.onchange = e => {
+  contactos.find(c => c.id === currentUserId).nombre = e.target.value;
+  localStorage.setItem('userName', e.target.value);
+  contactName.textContent = e.target.value;
+};
+
+// Botón de descarga de Markdown
+const downloadBtn = document.createElement('button');
+downloadBtn.textContent = 'Descargar chat (.md)';
+downloadBtn.className = 'mt-2 px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition';
+downloadBtn.onclick = exportarMarkdown;
+
+// Agregar inputs al panel de configuración
+configPanel.appendChild(document.createElement('hr'));
+configPanel.appendChild(document.createTextNode("Avatar y Nombre de Usuario"));
+configPanel.appendChild(avatarInput);
+configPanel.appendChild(nombreInput);
+configPanel.appendChild(downloadBtn);
 
 // -------------------- Alternar usuario --------------------
 document.getElementById('switch-user').onclick = () => {
   currentUserId = currentUserId === 1 ? 2 : 1;
   contactName.textContent = contactos.find(c => c.id === currentUserId).nombre;
   
-  // Limpiar y volver a renderizar mensajes según usuario actual
+  // Actualizar inputs de configuración
+  nombreInput.value = contactos.find(c => c.id === currentUserId).nombre;
+
   chatWindow.innerHTML = '';
   mensajes.forEach(msg => renderMessage(msg));
 };
@@ -92,7 +161,10 @@ body.ondblclick = () => body.classList.toggle('dark');
 fetch('data.json')
   .then(r => r.json())
   .then(data => {
-    contactos = data.contactos;
-    mensajes = data.mensajes; // cargar todos los mensajes desde el inicio
+    contactos = data.contactos.map(c => ({
+      ...c,
+      avatar: c.avatar || 'assets/avatar.png'
+    }));
+    mensajes = data.mensajes;
     mensajes.forEach(msg => renderMessage(msg));
   });
