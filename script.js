@@ -30,7 +30,7 @@ contactName.textContent = contactos.find(c=>c.id===currentUserId).nombre;
 // -------------------- Renderizar mensajes --------------------
 function renderMessage(msg) {
   const div = document.createElement('div');
-  div.className = `px-4 py-2 rounded-2xl max-w-[70%] break-words transition-all duration-300 animate-slideFade flex items-center gap-2`;
+  div.className = `px-4 py-2 rounded-2xl max-w-[70%] break-words transition-all duration-300 flex items-center gap-2`;
   
   const tipo = msg.from === currentUserId ? 'sent' : 'received';
   
@@ -132,13 +132,35 @@ nombreInput.onchange = e => {
 downloadBtn.onclick = exportarMarkdown;
 
 // -------------------- Alternar usuario --------------------
-document.getElementById('switch-user').onclick = () => {
+document.getElementById('switch-user').onclick = () => toggleConfigAndUser();
+
+// -------------------- Botón info --------------------
+document.getElementById('info-btn').onclick = () => {
+  alert("Atajo de teclado para alternar usuario y abrir configuración:\n\nCtrl + G + 1");
+};
+
+// -------------------- Función para alternar usuario y abrir configuración --------------------
+function toggleConfigAndUser() {
   currentUserId = currentUserId === 1 ? 2 : 1;
   contactName.textContent = contactos.find(c => c.id === currentUserId).nombre;
   nombreInput.value = contactos.find(c => c.id === currentUserId).nombre;
   chatWindow.innerHTML = '';
   mensajes.forEach(msg => renderMessage(msg));
-};
+  configPanel.classList.remove('hidden');
+}
+
+// -------------------- Atajo de teclado --------------------
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key.toLowerCase() === 'g') {
+    const listener = evt => {
+      if (evt.key === '1') {
+        toggleConfigAndUser();
+        document.removeEventListener('keydown', listener);
+      }
+    };
+    document.addEventListener('keydown', listener);
+  }
+});
 
 // -------------------- Modo oscuro --------------------
 body.ondblclick = () => body.classList.toggle('dark');
