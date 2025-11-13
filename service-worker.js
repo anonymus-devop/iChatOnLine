@@ -1,4 +1,4 @@
-const CACHE='chat-pwa-tailwind-full-cache';
+const CACHE='chat-pwa-tailwind-completo-cache';
 const URLS=['/','/index.html','/style.css','/script.js','/data.json','/manifest.json'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS))));
 self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
