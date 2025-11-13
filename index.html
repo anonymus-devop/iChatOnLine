@@ -4,19 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat PWA Tailwind</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
 <link rel="manifest" href="manifest.json">
-<style>
-:root {
-  --color-sent: #007AFF;
-  --color-received: #E5E5EA;
-}
-#chat-window::-webkit-scrollbar { width:6px; }
-#chat-window::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.2); border-radius:3px; }
-</style>
+<link rel="stylesheet" href="style.css">
+
 </head>
 <body class="bg-gray-200 flex justify-center items-center min-h-screen">
-<div id="app" class="w-96 h-[700px] flex flex-col rounded-3xl overflow-hidden backdrop-blur-lg bg-white/20 shadow-xl relative">
+<div id="app" class="w-96 h-[700px] flex flex-col rounded-3xl overflow-hidden backdrop-blur-lg bg-white/20 shadow-2xl relative">
 
   <!-- Header -->
   <div id="chat-header" class="flex justify-between items-center px-6 py-4 bg-white/30 backdrop-blur-lg">
@@ -31,11 +28,11 @@
   <div id="chat-input" class="flex p-4 gap-2 bg-white/30 backdrop-blur-lg">
     <input id="mensaje-input" type="text" placeholder="Escribe un mensaje..."
       class="flex-1 rounded-full px-4 py-2 outline-none bg-white/50 placeholder-gray-700">
-    <button id="send-btn" class="px-4 py-2 rounded-full bg-blue-500 text-white">Enviar</button>
+    <button id="send-btn" class="px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition">Enviar</button>
   </div>
 
   <!-- Panel Configuración -->
-  <div id="config-panel" class="hidden absolute top-0 left-0 w-full h-full bg-black/50 backdrop-blur-md flex flex-col p-6 gap-4">
+  <div id="config-panel" class="hidden absolute top-0 left-0 w-full h-full bg-black/50 backdrop-blur-md flex flex-col p-6 gap-4 z-50">
     <h2 class="text-white text-xl font-semibold">Configuración</h2>
     <label class="text-white flex justify-between items-center">
       Color Enviado <input type="color" id="colorEnviado" value="#007AFF">
@@ -46,7 +43,7 @@
     <label class="text-white flex justify-between items-center">
       Fondo <input type="color" id="fondoChat" value="#ffffff">
     </label>
-    <button id="closeConfig" class="mt-4 px-4 py-2 rounded-full bg-white text-black">Cerrar</button>
+    <button id="closeConfig" class="mt-4 px-4 py-2 rounded-full bg-white text-black hover:bg-gray-200 transition">Cerrar</button>
   </div>
 
 </div>
@@ -54,7 +51,9 @@
 <script src="script.js"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker registrado'))
+    .catch(err => console.log('Error Service Worker:', err));
 }
 </script>
 </body>
