@@ -1,4 +1,4 @@
-// script.js actualizado: Ctrl + Alt + O + U solo hace swap de usuarios, NO abre configuración
+// script.js actualizado: Ctrl + Alt + O + U solo swap de usuarios, nueva tecla para abrir configuración
 
 document.addEventListener('DOMContentLoaded', () => {
   let mensajes = [];
@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatWindow = document.getElementById('chat-window');
   const contactName = document.getElementById('contact-name');
   const body = document.body;
+  const configPanel = document.getElementById('config-panel');
   const avatarInput = document.getElementById('avatarInput');
   const nombreInput = document.getElementById('nombreInput');
 
@@ -50,6 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
     mensajes.forEach(msg=>renderMessage(msg));
   }
 
+  function abrirConfiguracion(){
+    configPanel.classList.remove('hidden');
+  }
+
   // -------------------- Atajo Ctrl + Alt + O + U solo swap de usuario --------------------
   document.addEventListener('keydown', e => {
     if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='o'){
@@ -60,6 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.removeEventListener('keydown', handleNextKey);
       };
       document.addEventListener('keydown', handleNextKey);
+    }
+  });
+
+  // -------------------- Nuevo atajo Ctrl + Alt + G para abrir configuración --------------------
+  document.addEventListener('keydown', e => {
+    if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='g'){
+      abrirConfiguracion();
     }
   });
 
