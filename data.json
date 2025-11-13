@@ -1,4 +1,10 @@
 {
-  "contactos":[{"id":1,"nombre":"Amigo"}],
-  "mensajes":[{"contactoId":1,"tipo":"received","contenido":"Hola! Bienvenido a tu chat PWA."}]
+  "contactos":[
+    {"id":1,"nombre":"Amigo"},
+    {"id":2,"nombre":"Tú"}
+  ],
+  "mensajes":[
+    {"contactoId":1,"tipo":"received","contenido":"Hola! Bienvenido al chat PWA."},
+    {"contactoId":2,"tipo":"sent","contenido":"¡Hola! Qué tal?"}
+  ]
 }
